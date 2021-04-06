@@ -29,8 +29,7 @@ const dateBuilder = (fecha) => {
   let day = days[fecha.getDay()];
   let date = fecha.getDate();
   let month = months[fecha.getMonth()];
-  let year = fecha.getFullYear();
-
+ 
   return `${day} ${date} ${month}`;
 };
 
