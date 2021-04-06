@@ -1,0 +1,55 @@
+.counter{
+    border: 1px solid rgb(79, 79, 94);
+    border-radius: 10%;
+    padding: 1em;
+    box-shadow: 20px 10px teal;
+    margin-bottom: 1em;
+}
+
+.weather{
+    border: 1px solid rgb(79, 79, 94);
+    border-radius: 10%;
+    padding: 1em;
+    box-shadow: 20px 10px teal;
+}
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+ }
+
+.card{
+    border: solid 1px black;
+    border-radius: 5%;
+    flex: 0 1 24%;
+}
+
+img {
+    width: 40%;
+}
+.gentes{
+   
+}
+
+
+ 
+@media screen and (min-width: 20em) {
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+     
+    }
+
+    .card {
+        flex: 0 1 calc(50% - 1em);
+    }
+}
+
+@media screen and (min-width: 60em) {
+
+    .card {
+        flex: 0 1 calc(25% - 1em);
+      
+    }
+}
