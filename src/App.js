@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import "./App.css";
 
-const dateBuilder = (fecha) => {
+const dateBuilder = (today) => {
   let months = [
     "January",
     "February",
@@ -26,9 +26,9 @@ const dateBuilder = (fecha) => {
     "Friday",
     "Saturday",
   ];
-  let day = days[fecha.getDay()];
-  let date = fecha.getDate();
-  let month = months[fecha.getMonth()];
+  let day = days[today.getDay()];
+  let date = today.getDate();
+  let month = months[today.getMonth()];
  
   return `${day} ${date} ${month}`;
 };
@@ -72,9 +72,9 @@ class App extends Component {
       whatClassShouldItUse = "fog";
     } else if (this.state.info.weather[0].main === "Drizzle") {
       whatClassShouldItUse = "drizzle";
-    } else if (this.state.info.weather[0].main === "Clouds") {
-      whatClassShouldItUse = "clouds";
-    } else if (this.state.info.weather[0].main === "clear") {
+    } else if (this.state.info.weather[0].main === "Thunderstorm") {
+      whatClassShouldItUse = "thunderstorm";
+    } else if (this.state.info.weather[0].main === "Clear") {
       whatClassShouldItUse = "app";
     }
 
