@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 
@@ -29,18 +29,45 @@ const dateBuilder = (today) => {
   let day = days[today.getDay()];
   let date = today.getDate();
   let month = months[today.getMonth()];
- 
+
   return `${day} ${date} ${month}`;
 };
 
-const key = process.env.REACT_APP_WEATHER_API_KEY
+const key = process.env.REACT_APP_WEATHER_API_KEY;
 
-class App extends Component {
-  state = {
-    info: [],
-  };
+const App = () => {
+  const [info, setInfo] = useState([]);
 
-  handleInputChange = (event) => {
+  const [background, setBackground] = useState("app");
+
+  useEffect(() => {
+    if (info.weather) {
+      switch (info.weather[0].main) {
+        case "Rain":
+          setBackground("rain");
+          break;
+        case "Clouds":
+          setBackground("clouds");
+          break;
+        case "Snow":
+          setBackground("snow");
+          break;
+        case "Fog":
+          setBackground("fog");
+          break;
+        case "Drizzle":
+          setBackground("drizzle");
+        case "Thunderstorm":
+          setBackground("thunderstorm");
+        case "Clear":
+          setBackground("app");
+          break;
+      }
+    }
+  }, [info]);
+
+  const handleInputChange = (event) => {
+    console.log("event", event);
     if (event.key === "Enter") {
       const city = event.target.value;
       const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`;
@@ -49,76 +76,49 @@ class App extends Component {
         .get(apiUrl)
         .then((res) => {
           const { data } = res;
-          this.setState({ info: data });
+          console.log("api response", res);
+
+          setInfo(data);
+          console.log("info", info);
         })
 
         .catch((err) => console.log("err", err));
     }
   };
 
-  render() {
-    // let hour = new Date().getHours();
-
-    let whatClassShouldItUse = "app";
-    if (typeof this.state.info.weather == "undefined") {
-      whatClassShouldItUse = "app";
-    } else if (this.state.info.weather[0].main === "Rain") {
-      whatClassShouldItUse = "rain";
-    } else if (this.state.info.weather[0].main === "Clouds") {
-      whatClassShouldItUse = "clouds";
-    } else if (this.state.info.weather[0].main === "Snow") {
-      whatClassShouldItUse = "snow";
-    } else if (this.state.info.weather[0].main === "Fog") {
-      whatClassShouldItUse = "fog";
-    } else if (this.state.info.weather[0].main === "Drizzle") {
-      whatClassShouldItUse = "drizzle";
-    } else if (this.state.info.weather[0].main === "Thunderstorm") {
-      whatClassShouldItUse = "thunderstorm";
-    } else if (this.state.info.weather[0].main === "Clear") {
-      whatClassShouldItUse = "app";
-    }
-
-
-    return (
-
-     
-      <div className={whatClassShouldItUse}>
-        <main>
-          <div className="search-box">
-            <input
-              type="text"
-              className="search-bar"
-              placeholder="search..."
-              onKeyPress={this.handleInputChange}
-            />
-          </div>
-          <div className="location-box">
-            <div className="location">{this.state.info.name}</div>
-            <div className="date">{dateBuilder(new Date())}</div>
-          </div>
-          {typeof this.state.info.main != "undefined" ? (
-            <div>
-              <div className="weather-box">
-                <div className="temp">
-                  {Math.round(this.state.info.main.temp - 273.15)}º C
-                </div>
-
-                <div className="weather">{this.state.info.weather[0].main}</div>
-                <div className="pressure">
-                  {this.state.info.main.pressure} mbar
-                </div>
-                <div className="pressure">
-                  {this.state.info.main.humidity} % humidity
-                </div>
+  return (
+    <div className={background}>
+      <main>
+        <div className="search-box">
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="search..."
+            onKeyPress={handleInputChange}
+          />
+        </div>
+        <div className="location-box">
+          <div className="location">{info.name}</div>
+          <div className="date">{dateBuilder(new Date())}</div>
+        </div>
+        {typeof info.main != "undefined" ? (
+          <div>
+            <div className="weather-box">
+              <div className="temp">
+                {Math.round(info.main.temp - 273.15)}º C
               </div>
+
+              <div className="weather">{info.weather[0].main}</div>
+              <div className="pressure">{info.main.pressure} mbar</div>
+              <div className="pressure">{info.main.humidity} % humidity</div>
             </div>
-          ) : (
-            <></>
-          )}
-        </main>
-      </div>
-    );
-  }
-}
+          </div>
+        ) : (
+          <></>
+        )}
+      </main>
+    </div>
+  );
+};
 
 export default App;
